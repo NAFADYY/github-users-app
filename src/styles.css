@@ -1,0 +1,674 @@
+:root {
+  --bg: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --card: #f9fafb;
+  --border: #e5e7eb;
+  --primary: #2563eb;
+  --primary-contrast: #ffffff;
+  --navbar-h: 56px;
+  --fly-ghost-bg: #f3f4f6;
+  --fly-ghost-border: rgba(0, 0, 0, 0.08);
+  --fly-ghost-shadow: 0 12px 34px rgba(0, 0, 0, 0.14);
+  --fly-ghost-overlay: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.12)
+  );
+}
+
+[data-theme="dark"] {
+  --bg: #0b1220;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --card: #0f172a;
+  --border: #1f2937;
+  --primary: #3b82f6;
+  --primary-contrast: #0b1220;
+
+  --fly-ghost-bg: #f3f4f6; /* Slate 800 تقريبا */
+  --fly-ghost-border: rgba(255, 255, 255, 0.7);
+  --fly-ghost-shadow: 0 18px 42px rgba(0, 0, 0, 0.7);
+  --fly-ghost-overlay: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.16),
+    rgba(255, 255, 255, 0.08)
+  );
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  background: var(--bg);
+  color: var(--text);
+  padding-top: var(--navbar-h);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+.navbar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+.brand img {
+  width: 24px;
+  height: 24px;
+}
+
+/* ===== Navlinks unified look ===== */
+.navlinks {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+/* خلي الروابط وزر الثيم نفس الارتفاع والـpadding */
+.navlinks .link,
+.navlinks .btn {
+  display: inline-flex;
+  align-items: center; /* أيقونة + نص في المنتصف رأسيًا */
+  justify-content: center;
+  gap: 6px; /* جاب صغير بين الأيقونة والنص أو النص والبادچ */
+  padding: 8px 12px; /* نفس الـpadding Y للجميع */
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1; /* يمنع اختلاف الارتفاع بسبب baseline */
+}
+
+/* أي SVG جوه اللينك يبقى متوسّط مظبوط */
+.navlinks .link svg,
+.navlinks .btn svg {
+  display: block;
+}
+
+.link.active,
+.link:hover,
+.navlinks .btn:hover {
+  background: var(--card);
+}
+
+/* Fix brand text disappearing on theme toggle */
+.navbar .brand,
+.navbar .brand * {
+  color: var(--text) !important;
+}
+.navbar .brand {
+  white-space: nowrap;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+.navbar-inner {
+  min-width: 0;
+}
+
+/* ===== Controls grid: خلي العمود التاني ثابت المدى ===== */
+.controls {
+  display: grid;
+  grid-template-columns: 1fr minmax(140px, 220px);
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+.search {
+  width: 100%;
+  padding: 13px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+
+/* ===== Select (custom) ===== */
+.select-wrap {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+.select-trigger {
+  width: 100%;
+  min-width: 0;
+  height: 44px; /* Tap target مناسب */
+  line-height: 44px;
+  padding: 0 36px 0 12px; /* مساحة للسهم يمين */
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 16px; /* يمنع الزووم في iOS */
+  text-align: left;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+}
+.select-trigger:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 20%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="dark"] .fly-clone {
+    outline: 1px solid rgba(255, 255, 255, 0.12);
+  }
+}
+
+.select-caret {
+  font-size: 18px;
+  color: var(--muted);
+}
+
+/* المنيو المنسدلة */
+.select-menu {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0; /* = عرض الحاوية بالظبط (ما تخرجش برّا الإطار) */
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+  padding: 6px;
+  margin: 0;
+  list-style: none;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+/* عنصر داخل المنيو */
+.select-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+}
+.select-item:hover,
+.select-item:focus {
+  background: color-mix(in oklab, var(--primary) 12%, var(--card));
+  outline: none;
+}
+.select-item.is-selected {
+  background: color-mix(in oklab, var(--primary) 18%, var(--card));
+  font-weight: 600;
+}
+.select-check {
+  font-size: 16px;
+  color: var(--text);
+}
+
+/* تحكم إضافي على الشاشات الصغيرة: */
+@media (max-width: 600px) {
+  .select-menu {
+    inset-inline: 0; /* يمين/شمال = 0 */
+    max-height: 50vh; /* ما تعديش نص الشاشة */
+  }
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.card {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+.card h3 {
+  margin: 0;
+  font-size: 16px;
+}
+.card p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.card-actions {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  background: var(--card);
+  color: var(--text);
+}
+.btn.primary {
+  background: var(--primary);
+  color: var(--primary-contrast);
+  border-color: var(--primary);
+}
+.btn.danger {
+  background: transparent;
+  color: #ef4444;
+  border-color: #ef4444;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Pagination */
+
+/* Pagination: سطر واحد ومتنصف */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 4px;
+  margin-top: 15px;
+}
+.pagination::-webkit-scrollbar {
+  display: none;
+}
+.pagination {
+  scrollbar-width: none;
+}
+
+.page-btn {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* الافتراضي للموبايل: اخفي الـ label */
+.page-btn .label {
+  display: none;
+}
+/* من أول الشاشات المتوسطة md≈≥768px: أظهر الـ label */
+@media (min-width: 768px) {
+  .page-btn .label {
+    display: inline;
+  }
+}
+
+/* تصغير مسافات على الموبايل */
+@media (max-width: 420px) {
+  .pagination {
+    gap: 6px;
+  }
+  .page-btn {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+  .page-btn .only-icon {
+    margin: 0;
+  }
+}
+
+.page-btn[aria-current="page"] {
+  background: var(--primary);
+  color: var(--primary-contrast);
+  border-color: var(--primary);
+}
+
+/* Empty & Status */
+.empty {
+  padding: 24px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  text-align: center;
+  color: var(--muted);
+  background: var(--card);
+}
+.emptySVG {
+  width: 250px;
+  height: 250px;
+}
+.status {
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+/* Responsive controls */
+@media (max-width: 600px) {
+  .controls {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+/* ===== UserCard (fixed) ===== */
+.usercard {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.usercard .avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border);
+}
+
+.ucard-body {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.ucard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.title-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ucard-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ucard-sub {
+  color: var(--muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.badge.admin {
+  background: var(--text);
+  color: var(--bg);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  line-height: 1.8;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.ucard-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.06s ease, background 0.15s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+.icon-btn:hover {
+  background: var(--card);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+.icon-btn:active {
+  transform: scale(0.96);
+}
+.icon-btn[aria-pressed="true"] {
+  border-color: var(--primary);
+  background: color-mix(in oklab, var(--primary) 8%, var(--bg));
+}
+
+/* ==== Meta grid  ==== */
+.ucard-meta {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+}
+
+.usercard > .ucard-meta {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+}
+
+.ucard-meta li {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 2px;
+  min-width: 0;
+  text-align: center;
+}
+
+.meta-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Inline error in card */
+.ucard-error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.card.usercard {
+  align-items: start;
+  gap: 12px;
+  padding: 14px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .usercard {
+    grid-template-columns: 56px 1fr;
+  }
+  .usercard .avatar {
+    width: 56px;
+    height: 56px;
+  }
+  .ucard-meta {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .SiteName {
+    display: none;
+  }
+}
+
+/* ===== Favorites badge circle (inline next to text) ===== */
+.navlinks .fav-link {
+  position: relative;
+}
+
+/* البادچ الدائرية جنب النص */
+.fav-badge {
+  display: inline-flex;
+  align-items: center; /* في المنتصف رأسيًا */
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px; /* تسمح بـ 2-3 أرقام بدون تكسير */
+  border-radius: 999px;
+  background: var(--primary, #2563eb);
+  color: var(#fff);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  margin-left: 6px; /* جاب صغير بين كلمة Favorites والبادچ */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* نبضة بسيطة عند الإضافة */
+@keyframes badge-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.fav-badge.pop {
+  animation: badge-pop 0.32s ease;
+}
+
+/* عنصر الطيران العابر (لو بتستخدم flyTo) */
+.fly-clone {
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.12)
+  );
+  backdrop-filter: blur(2px);
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.06));
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* احترام تفضيل تقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+  .fav-badge {
+    animation: none !important;
+  }
+}
+
+/* ==========
+======= BACK TO TOP ===========
+============== */
+
+.back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  z-index: 1200;
+}
+.back-to-top:hover {
+  background: var(--primary);
+  color: var(--primary-contrast);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
